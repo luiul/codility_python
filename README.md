@@ -1,13 +1,13 @@
 <!-- omit in toc -->
 # 🏋️‍♂️ Revision for Codility Test on Python
 
-# 1. References
+## 1. References
 
 [W3 Python Reference](https://www.w3schools.com/python/python_reference.asp)
 
-# 2. Tasks
+## 2. Tasks
 
-## 2.1. BinaryGap
+### 2.1. BinaryGap
 
 Find biggest binary gap in integer N. Return 0 by default:
 
@@ -20,7 +20,7 @@ def solution(N):
     return gap
 ```
 
-## 2.2. CyclicRotation
+### 2.2. CyclicRotation
 
 Rotate the list. If the list is empty return the list:
 
@@ -31,7 +31,7 @@ def solution(A, K):
     else:
         return A
 ```
-## 2.3. OddOccurrencesInArray
+### 2.3. OddOccurrencesInArray
 
 Remove odd one out in a list with an odd number of elements.
 
@@ -46,7 +46,7 @@ def solution(A):
     return list(seen)[0]
 ```
 
-## 2.4. FrogJmp
+### 2.4. FrogJmp
 
 Help the frog reach its goal with the least number of steps necessary.
 
@@ -56,7 +56,7 @@ def solution(X,Y,D):
     return Z//D + (Z%D > 0)
 ```
 
-## 2.5. PermMissingElem
+### 2.5. PermMissingElem
 Find the missing integer in a list.
 
 ```python
@@ -68,7 +68,7 @@ def solution(A):
     return missing
 ```
 
-## 2.6. TapeEquilibrium
+### 2.6. TapeEquilibrium
 
 Minimize the distance between partitions of the tape.
 
@@ -103,7 +103,7 @@ def solution(A):
     return min_d
 ```
 
-## 2.7. FrogRiverOne
+### 2.7. FrogRiverOne
 
 Find the min time for the frog to cross the river:
 
@@ -120,7 +120,7 @@ def solution(X, A):
     return -1
 ```
 
-## 2.8. PermCheck
+### 2.8. PermCheck
 
 Find out if the array is a permutation of length N:
 
@@ -131,7 +131,7 @@ def solution(A):
     return int(A == p)
 ```
 
-## 2.9. MaxCounters
+### 2.9. MaxCounters
 
 Implement a list of counters with two functions: increment and max_counters.
 
@@ -158,21 +158,21 @@ def solution(N,A):
 
     for v in A:
         x = v-1
-        # lazy max function
+        ## lazy max function
         if x == N:
             max_to_set = max_counter
-        # increment function
+        ## increment function
         if 0 <= x < N:
-            # update counter value if (a) not maxxed or (b) maxxed previously
+            ## update counter value if (a) not maxxed or (b) maxxed previously
             counters[x] = max(counters[x]+1, max_to_set+1)
-            # update lazy max function
+            ## update lazy max function
             max_counter = max(counters[x],max_counter)
 
     result = list(map(lambda c : max(c,max_to_set), counters))
     return result
 ```
 
-## 2.10. MissingInteger
+### 2.10. MissingInteger
 
 Find the smallest integer N that's missing in a list. Return 1 by default.
 
@@ -202,7 +202,7 @@ def solution(A):
     return ans
 ```
 
-## 2.11. PassingCars
+### 2.11. PassingCars
 
 First solution (without prefix sums):
 
