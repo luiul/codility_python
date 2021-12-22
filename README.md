@@ -1,6 +1,26 @@
 <!-- omit in toc -->
 # 🏋️‍♂️ Revision for Codility Test on Python
 
+<!-- omit in toc -->
+## Description
+Repository for storing codility functions from exercises for future reference.
+
+<!-- omit in toc -->
+## Table of Contents
+- [1. References](#1-references)
+- [2. Tasks](#2-tasks)
+  - [2.1. BinaryGap](#21-binarygap)
+  - [2.2. CyclicRotation](#22-cyclicrotation)
+  - [2.3. OddOccurrencesInArray](#23-oddoccurrencesinarray)
+  - [2.4. FrogJmp](#24-frogjmp)
+  - [2.5. PermMissingElem](#25-permmissingelem)
+  - [2.6. TapeEquilibrium](#26-tapeequilibrium)
+  - [2.7. FrogRiverOne](#27-frogriverone)
+  - [2.8. PermCheck](#28-permcheck)
+  - [2.9. MaxCounters](#29-maxcounters)
+  - [2.10. MissingInteger](#210-missinginteger)
+  - [2.11. PassingCars](#211-passingcars)
+
 ## 1. References
 
 [W3 Python Reference](https://www.w3schools.com/python/python_reference.asp)
@@ -9,7 +29,7 @@
 
 ### 2.1. BinaryGap
 
-Find biggest binary gap in integer N. Return 0 by default:
+Find biggest binary gap in integer N. Return 0 by default.
 
 ```python
 def solution(N):
@@ -22,7 +42,7 @@ def solution(N):
 
 ### 2.2. CyclicRotation
 
-Rotate the list. If the list is empty return the list:
+Rotate the list. If the list is empty return the list.
 
 ```python
 def solution(A, K):
@@ -85,7 +105,7 @@ def solution(A):
     return min_d
 ```
 
-Second solution (better performance with a 100% score):
+Second solution (better performance with a 100% score).
 
 ```python
 def solution(A):
@@ -105,7 +125,7 @@ def solution(A):
 
 ### 2.7. FrogRiverOne
 
-Find the min time for the frog to cross the river:
+Find the min time for the frog to cross the river.
 
 ```python
 def solution(X, A):
@@ -122,7 +142,7 @@ def solution(X, A):
 
 ### 2.8. PermCheck
 
-Find out if the array is a permutation of length N:
+Find out if the array is a permutation of length N.
 
 ```python
 def solution(A):
@@ -148,7 +168,7 @@ def solution(N,A):
     return c
 ```
 
-Solution with better performance:
+Solution with better performance.
 
 ```python
 def solution(N,A):
@@ -191,7 +211,7 @@ def solution(A):
         return max(A)+1
 ```
 
-Solution with better performance:
+Solution with better performance.
 
 ```python
 def solution(A):
@@ -204,7 +224,7 @@ def solution(A):
 
 ### 2.11. PassingCars
 
-First solution (without prefix sums):
+First solution (without prefix sums).
 
 ```python
 def solution(A):
@@ -220,7 +240,7 @@ def solution(A):
     return counter
 ```
 
-Second solution implementing prefix sums:
+Second solution implementing prefix sums.
 
 ```python
 def solution(A):
