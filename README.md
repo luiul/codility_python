@@ -23,16 +23,16 @@ Repository for storing codility functions from exercises for future reference.
   - [2.12. CountDiv](#212-countdiv)
   - [2.13. GenomicRangeQuery](#213-genomicrangequery)
   - [2.14. MinAvgTwoSlice](#214-minavgtwoslice)
-  - [Distinct](#distinct)
-  - [MaxProductOfThree](#maxproductofthree)
-  - [Triangle](#triangle)
-  - [NumberOfDiscIntersections](#numberofdiscintersections)
-  - [Brackets or Nesting](#brackets-or-nesting)
-  - [Fish](#fish)
-  - [StoneWall](#stonewall)
-  - [Dominator](#dominator)
-  - [EquiLeader](#equileader)
-  - [FibFrog](#fibfrog)
+  - [2.15. Distinct](#215-distinct)
+  - [2.16. MaxProductOfThree](#216-maxproductofthree)
+  - [2.17. Triangle](#217-triangle)
+  - [2.18. NumberOfDiscIntersections](#218-numberofdiscintersections)
+  - [2.19. Brackets or Nesting](#219-brackets-or-nesting)
+  - [2.20. Fish](#220-fish)
+  - [2.21. StoneWall](#221-stonewall)
+  - [2.22. Dominator](#222-dominator)
+  - [2.23. EquiLeader](#223-equileader)
+  - [2.24. FibFrog](#224-fibfrog)
 
 ## 1. References
 
@@ -444,7 +444,7 @@ def solution(A):
 ```
 
 
-### Distinct
+### 2.15. Distinct
 
 Return number of distinct integers in a list.
 
@@ -453,7 +453,7 @@ def solution(A):
     return len(set(A))
 ```
 
-### MaxProductOfThree
+### 2.16. MaxProductOfThree
 
 Maximize the multiplication of three elements in a list.
 
@@ -470,7 +470,7 @@ def solution(A):
     return max(options)
 ```
 
-### Triangle
+### 2.17. Triangle
 
 Return 1 if there is a triangle in the list, otherwise return 0.
 
@@ -498,7 +498,7 @@ def solution(A):
 
 Explanation: if we sort the list, we can guarantee that A[i+2] + A[i+1] > A[i] and A[i+2] + A[i] > A[i+1] so we only have to check the third condition.
 
-### NumberOfDiscIntersections
+### 2.18. NumberOfDiscIntersections
 
 Naive solution: Draw biggest circle and see if smaller circles overlap.
 
@@ -567,7 +567,7 @@ def solution(A):
 ```
 
 
-### Brackets or Nesting
+### 2.19. Brackets or Nesting
 
 Solution: Start with an empty stack. Append opening brackets. Pop opening brackets iff we see correct closing bracket, otherwise we know the string is not nested. Return the negation of the empty stack.
 
@@ -598,7 +598,7 @@ def solution(S):
     return int(not stack)
 ```
 
-### Fish
+### 2.20. Fish
 
 Solution:
 
@@ -635,7 +635,7 @@ def solution(A, B):
     return fish_alive
 ```
 
-### StoneWall
+### 2.21. StoneWall
 
 Min the numbers of blocks required to build a wall given the height requirement list.
 
@@ -702,7 +702,7 @@ def solution(H):
     return blocks
 ```
 
-### Dominator
+### 2.22. Dominator
 
 Find an index of the list lead.
 
@@ -725,7 +725,7 @@ def solution(A):
     return -1
 ```
 
-### EquiLeader
+### 2.23. EquiLeader
 
 Naive solution:
 
@@ -833,7 +833,7 @@ def solution(A):
     return n_equi_leader
 ```
 
-### FibFrog
+### 2.24. FibFrog
 
 First naive solution is wrong. Idea: make the farthest jump possible first, make smaller jumps afterwards. After you make the farthest jump possible consider the rest of the list, starting from the current position.
 
