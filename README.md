@@ -23,6 +23,16 @@ Repository for storing codility functions from exercises for future reference.
   - [2.12. CountDiv](#212-countdiv)
   - [2.13. GenomicRangeQuery](#213-genomicrangequery)
   - [2.14. MinAvgTwoSlice](#214-minavgtwoslice)
+  - [Distinct](#distinct)
+  - [MaxProductOfThree](#maxproductofthree)
+  - [Triangle](#triangle)
+  - [NumberOfDiscIntersections](#numberofdiscintersections)
+  - [Brackets or Nesting](#brackets-or-nesting)
+  - [Fish](#fish)
+  - [StoneWall](#stonewall)
+  - [Dominator](#dominator)
+  - [EquiLeader](#equileader)
+  - [FibFrog](#fibfrog)
 
 ## 1. References
 
@@ -391,7 +401,7 @@ def solution(A):
     for i in range(1,n+1):
         p[i]=p[i-1]+A[i-1]
 
-    avg_expand_best_slice_so_far = 0
+    avg_extend_best_slice_so_far = 0
     avg_two_slice = 0
 
     # -- Initialize with first slice --
@@ -402,26 +412,26 @@ def solution(A):
 
     # initialize min average
     avg_here = (A[left_index]+A[left_index+1])/2
-    # ikeep track of min average
+    # keep track of min average
     min_avg = avg_here
 
     # -- Find min avg of every slice that ends at i-th element, starting with the slice that ends at 2nd element; keep track of min average and best slice --
     for i in range(2,n):
-        # expand best slice so far
-        avg_expand_best_slice_so_far = (p[i+1]-p[left_index])/(i-left_index+1)
+        # extend best slice so far
+        avg_extend_best_slice_so_far = (p[i+1]-p[left_index])/(i-left_index+1)
         # compute avg of two_slice
         avg_two_slice = (A[i-1]+A[i])/2
 
-        # -- Question: which is better, the expanded best slice so far or the new two slice? --
+        # -- Question: which is better, the extended best slice so far or the new two slice? --
         # two_slice is better
-        if avg_two_slice < avg_expand_best_slice_so_far:
+        if avg_two_slice < avg_extend_best_slice_so_far:
             avg_here = avg_two_slice
             # update new best slice (index)
             left_index = i-1
 
-        # expanded best slice is better
+        # extended best slice is better
         else:
-            avg_here = avg_expand_best_slice_so_far
+            avg_here = avg_extend_best_slice_so_far
 
         # -- Keep track of min avg and best slice --
         if avg_here < min_avg:
@@ -431,4 +441,503 @@ def solution(A):
             min_left_index = left_index
 
     return min_left_index
+```
+
+
+### Distinct
+
+Return number of distinct integers in a list.
+
+```python
+def solution(A):
+    return len(set(A))
+```
+
+### MaxProductOfThree
+
+Maximize the multiplication of three elements in a list.
+
+```python
+def solution(A):
+    A.sort(reverse=True)
+    options = []
+    # all elements are positive
+    options.append(A[0]*A[1]*A[2])
+    # at least one element is negative
+    options.append(A[-1]*A[-2]*A[0])
+    # all elements are negative
+    options.append(A[-1]*A[-2]*A[-3])
+    return max(options)
+```
+
+### Triangle
+
+Return 1 if there is a triangle in the list, otherwise return 0.
+
+Naive solution:
+
+```python
+def solution(A):
+    A.sort()
+    for i in range(2,len(A)):
+        if A[i] + A[i-1] > A[i-2] and A[i-1] + A[i-2] > A[i] and A[i-2] + A[i] > A[i-1]:
+            return 1
+    return 0
+```
+
+More compact solution:
+
+```python
+def solution(A):
+    A.sort()
+    for i in range(len(A)-2):
+        if A[i] + A[i+1] > A[i+2]:
+            return 1
+    return 0
+```
+
+Explanation: if we sort the list, we can guarantee that A[i+2] + A[i+1] > A[i] and A[i+2] + A[i] > A[i+1] so we only have to check the third condition.
+
+### NumberOfDiscIntersections
+
+Naive solution: Draw biggest circle and see if smaller circles overlap.
+
+```python
+def solution(A):
+    n = len(A)
+    i = list(range(n))
+    tuples = list(zip(i,A))
+    tuples.sort(key=lambda tup:tup[1], reverse=True)
+
+    counter = 0
+
+    # draw biggest circle
+    for i, t in enumerate(tuples):
+        c, r = t
+        u = c+r
+        l = c-r
+        a = [l,u]
+        # draw smallest circles
+        for j in range(i+1,len(tuples)):
+            sc, sr = tuples[j]
+            su = sc + sr
+            sl = sc - sr
+            b = [sl,su]
+            if get_overlap(a,b) > 0:
+                counter += 1
+    return counter
+
+def get_overlap(x, y):
+    return bool(range(max(x[0], y[0]), min(x[-1], y[-1])+1))
+```
+
+Solution with better performance: Computer lower and upper borders. Order them. Start with left upper border and count N lower borders left from it. N-1 are intersections. Move to the next upper border and repeat starting from the last lower border we considered.
+
+
+```python
+def solution(A):
+    lower_list = []
+    upper_list = []
+
+    for center, radius in enumerate(A):
+        lower_list.append(center - radius)
+        upper_list.append(center + radius)
+
+    lower_list.sort()
+    upper_list.sort()
+
+    j = 0
+    counter = 0
+    total_len = len(A)
+
+    for i in range(total_len):
+        while(j < total_len and lower_list[j] <= upper_list[i]):
+            # if circle not inside circle: in the first iteration we check its own lower limit
+            # if circle inside circle: in the last interation we check its own lower limit
+            # -> in both cases it cancels each other out -> there is no intersection
+            counter += j
+            counter -= i
+            # if next lower limit is left form the current upper limit -> there is an intersection
+            j += 1
+
+            if counter > 10000000:
+                return -1
+
+    return counter
+```
+
+
+### Brackets or Nesting
+
+Solution: Start with an empty stack. Append opening brackets. Pop opening brackets iff we see correct closing bracket, otherwise we know the string is not nested. Return the negation of the empty stack.
+
+```python
+def solution(S):
+    # make dictionary with bracket pairs
+    matches = dict(['()', '[]', '{}'])
+    # make empty stack
+    # an empty string is nested by default
+    stack = []
+
+    # iterate char of input string
+    for char in S:
+        # if char is oppening bracket, add it to the stack
+        if char in matches.keys():
+            stack.append(char)
+        # if stack is not empty AND
+        # last bracket in stack is key of char (bracket pair)
+        # remove the last element
+        # if this fails -> string is not properly nested
+        if char in matches.values():
+            if stack and matches[stack[-1]] == char:
+                stack.pop()
+            else:
+                return 0
+
+    # an empty string is nested by default
+    return int(not stack)
+```
+
+### Fish
+
+Solution:
+
+```python
+def solution(A, B):
+    size, direction = A, B
+    # at the start all fishes are alive
+    fish_alive = len(size)
+    # empty list = no fishes alive
+    if fish_alive == 0:
+        return 0
+    # make empty stack
+    stack = []
+
+    # iterate all fish numbers
+    for fish_nr in range(fish_alive):
+        # store fishes swimming downstream in a stack
+        if direction[fish_nr] == 1:
+            stack.append(size[fish_nr])
+
+        # make fishes swimming upstream fight with stack of fishes swimming upstream
+        if direction[fish_nr] == 0:
+            # new fish has to fight all fishes swimming downstream
+            while len(stack):
+                # fish in stack is bigger -> new fish gets eaten
+                if stack[-1] > size[fish_nr]:
+                    fish_alive -= 1
+                    break
+                # fish in stack is smaller -> new fish eats stack fish and fights next fish in stack
+                if stack[-1] < size[fish_nr]:
+                    fish_alive -= 1
+                    stack.pop()
+
+    return fish_alive
+```
+
+### StoneWall
+
+Min the numbers of blocks required to build a wall given the height requirement list.
+
+```python
+def solution(H):
+    req_height = H
+    block_h = 0
+    blocks = 0
+    stack = []
+
+    if len(req_height) in (0,1):
+        return len(req_height)
+
+    for i in range(len(req_height)):
+        if not stack:
+            stack.append(req_height[i])
+            block_h = req_height[i] - 0
+            blocks += 1
+
+        if stack:
+            while req_height[i] < sum(stack):
+                stack.pop()
+            if req_height[i] == sum(stack):
+                pass
+            if req_height[i] > sum(stack):
+                delta_block = req_height[i] - sum(stack)
+                stack.append(delta_block)
+                blocks += 1
+
+    return blocks
+```
+
+We remove the sum function for the stack and opt for keeping track of the current height with an additional variable.
+
+```python
+# remove the sum() statements to make it run faster
+def solution(H):
+    req_height = H
+    blocks = 0
+    stack = []
+    current_height = 0
+
+    if len(req_height) in (0,1):
+        return len(req_height)
+
+    for i in range(len(req_height)):
+        if not stack:
+            stack.append(req_height[i])
+            blocks += 1
+            current_height = req_height[i]
+
+        if stack:
+            while req_height[i] < current_height:
+                current_height -= stack[-1]
+                stack.pop()
+            if req_height[i] == current_height:
+                pass
+            if req_height[i] > current_height:
+                delta_block = req_height[i] - current_height
+                stack.append(delta_block)
+                blocks += 1
+                current_height = req_height[i]
+
+    return blocks
+```
+
+### Dominator
+
+Find an index of the list lead.
+
+```python
+def solution(A):
+    n = len(A)
+    if n == 0:
+        return -1
+
+    med = (n//2)
+    lead = sorted(A)[med]
+    count = 0
+
+    for i in range(n):
+        if lead == A[i]:
+            count += 1
+        if count > med:
+            return i
+
+    return -1
+```
+
+### EquiLeader
+
+Naive solution:
+
+```python
+def solution(A):
+    n = len(A)
+    # edge case
+    if n in (0,1):
+        return 0
+
+    med = n//2
+    lead = sorted(A)[med]
+    count = 0
+
+    for i in range(1,n):
+        if A[:i:].count(lead) > len(A[:i:])//2 and A[i::].count(lead) > len(A[i::])//2:
+            count += 1
+
+    return count
+```
+
+Solution with better performance: Use a `defaultdict` and store {list_value : frequency} in it. Iterate through the keys of the dict and check for the equi-leader condition.
+
+```python
+from collections import defaultdict
+
+def solution(A):
+    # make two dictionaries
+    # if they key does not exist, assign it to zero
+    marker_l = defaultdict(lambda : 0)
+    marker_r = defaultdict(lambda : 0)
+
+    # right dict has (key=list_value : value=frequency)
+    for i in range(len(A)):
+        # in the first iteration we have 0 (default value in dict) + 1 = 1
+        marker_r[A[i]] += 1
+
+    # instatiate counter and default leader
+    n_equi_leader = 0
+    leader = A[0]
+
+
+    # print(marker_r)
+    # print(marker_l)
+    # print('\n')
+    #
+    for i in range(len(A)):
+        # reduce frequency of first list value in right marker
+        marker_r[A[i]] -= 1
+        # print(marker_r)
+        # increase frequency of first list value in left marker (empty so far)
+        marker_l[A[i]] += 1
+        # print(marker_l)
+        print('\n')
+
+        # assign new leader if neccesary based on frequency
+        if marker_l[leader] < marker_l[A[i]]:
+            # assign new leader
+            leader = A[i]
+
+        # equi leader condition
+        # the left dict is growing while the right dict is shrinking
+        if (i+1) // 2 < marker_l[leader] and (len(A) - (i+1)) // 2 < marker_r[leader]:
+            n_equi_leader += 1
+
+    return n_equi_leader
+```
+
+Without the print statements:
+
+```python
+from collections import defaultdict
+
+def solution(A):
+    # make two dictionaries
+    # if they key does not exist, assign it to zero
+    marker_l = defaultdict(lambda : 0)
+    marker_r = defaultdict(lambda : 0)
+
+    # right dict has (key=list_value : value=frequency)
+    for i in range(len(A)):
+        # in the first iteration we have 0 (default value in dict) + 1 = 1
+        marker_r[A[i]] += 1
+
+    # instatiate counter and default leader
+    n_equi_leader = 0
+    leader = A[0]
+
+    for i in range(len(A)):
+        # reduce frequency of first list value in right marker
+        marker_r[A[i]] -= 1
+        # increase frequency of first list value in left marker (empty so far)
+        marker_l[A[i]] += 1
+
+        # assign new leader if neccesary based on frequency
+        if marker_l[leader] < marker_l[A[i]]:
+            # assign new leader
+            leader = A[i]
+
+        # equi leader condition
+        # the left dict is growing while the right dict is shrinking
+        if (i+1) // 2 < marker_l[leader] and (len(A) - (i+1)) // 2 < marker_r[leader]:
+            n_equi_leader += 1
+
+    return n_equi_leader
+```
+
+### FibFrog
+
+First naive solution is wrong. Idea: make the farthest jump possible first, make smaller jumps afterwards. After you make the farthest jump possible consider the rest of the list, starting from the current position.
+
+```python
+def solution(A):
+    # get length of list
+    n = len(A)
+    if n < 3:
+        return 1
+
+    # make relevant fibs
+    fib = [0,1]
+    i = 1
+    # relevant fibs
+    while fib[i] < n:
+        fib.append(fib[i] + fib[i-1])
+        i += 1
+
+    # relevant leaves
+    B = [0]*(len(A)+1)
+    for i in range(len(A)):
+        if A[i]:
+            B[i] = i+1
+    B[i+1]=len(A)+1
+    B = [i for i in B if i!=0]
+    B.sort(reverse=True)
+
+    # make possible jumps, default res is -1
+    i = 0
+    res = -1
+
+    while B:
+        if i == len(B):
+            break
+        if B[i] not in fib:
+            pass
+        if B[i] in fib:
+            res += 1
+            C = [x-B[i] for x in B]
+            B = [i for i in C if i>0]
+            # print(B)
+            i = 0
+            continue
+        i += 1
+
+    return res + 1
+```
+
+Similar idea to the naive solution but with better implementation and performance.
+
+```python
+def fib(n):
+    fib = [0,1]
+    i = 1
+    # relevant fibs
+    while fib[i] < n:
+        fib.append(fib[i] + fib[i-1])
+        i += 1
+    return fib
+
+def new_paths(A, n, last_pos, fn):
+    paths = []
+    # iterate the fib list
+    for f in fn:
+        # first iteration last_post = [-1]
+        new_pos = last_pos + f
+        # if news position is n or
+        # new position in A is one
+        # append the new leaf to the path
+        if new_pos == n or (new_pos < n and A[new_pos]==1):
+            paths.append(new_pos)
+    return paths
+
+
+def solution(A):
+    # get length of list
+    n = len(A)
+    # edge case
+    if n < 3:
+        return 1
+
+    # make fib list
+    fn = fib(n)[2:]
+
+    # starting position is [-1]
+    paths = set([-1]))
+
+    # initialize counter
+    jump = 1
+
+    while True:
+        # Considering each of the previous jump positions - How many leaves from there are one fib jump away
+        paths = set([idx for pos in paths for idx in new_paths(A, n, pos, fn)])
+
+        # no new jumps means game over!
+        if not paths:
+            break
+
+        # Return the number of jumps if [n] is in the path
+        if n in paths:
+            return jump
+
+        # If paths is not empty record the jump
+        jump += 1
+
+    return -1
 ```
