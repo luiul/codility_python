@@ -1,12 +1,14 @@
 <!-- omit in toc -->
-# 🏋️‍♂️ Revision for Codility Test on Python
+# Revision for Codility Test on Python 🤖
 
 <!-- omit in toc -->
 ## Description
-Repository for storing codility functions from exercises for future reference.
+Repository for storing codility functions from exercises for later use. We try to solve the problem naively at first and then refactor it to achieve better performance in the test. 
 
 <!-- omit in toc -->
 ## Table of Contents
+<details>
+<summary>Table of Contents</summary>
 - [1. References](#1-references)
 - [2. Tasks](#2-tasks)
   - [2.1. BinaryGap](#21-binarygap)
@@ -33,6 +35,7 @@ Repository for storing codility functions from exercises for future reference.
   - [2.22. Dominator](#222-dominator)
   - [2.23. EquiLeader](#223-equileader)
   - [2.24. FibFrog](#224-fibfrog)
+</details>
 
 ## 1. References
 
