@@ -9,6 +9,7 @@ Repository for storing codility functions from exercises for later use. We try t
 ## Table of Contents
 <details>
 <summary>Table of Contents</summary>
+
 - [1. References](#1-references)
 - [2. Tasks](#2-tasks)
   - [2.1. BinaryGap](#21-binarygap)
@@ -35,6 +36,7 @@ Repository for storing codility functions from exercises for later use. We try t
   - [2.22. Dominator](#222-dominator)
   - [2.23. EquiLeader](#223-equileader)
   - [2.24. FibFrog](#224-fibfrog)
+
 </details>
 
 ## 1. References
@@ -67,6 +69,18 @@ def solution(A, K):
     else:
         return A
 ```
+Alternative: 
+
+```python
+from collections import deque
+
+def solution(A,K):
+    d = deque(A)
+    d.rotate(K)
+    l = list(d)
+    return l
+```
+
 ### 2.3. OddOccurrencesInArray
 
 Remove odd one out in a list with an odd number of elements.
@@ -104,6 +118,14 @@ def solution(A):
     return missing
 ```
 
+Alternative: 
+
+```python
+def solution(A): 
+    B = set(range(1,len(A)+2))
+    return B.difference(A).pop()
+```
+
 ### 2.6. TapeEquilibrium
 
 Minimize the distance between partitions of the tape.
@@ -120,6 +142,28 @@ def solution(A):
 
     return min_d
 ```
+
+Alternative: 
+
+```python
+def solution(A):
+    right_sum = sum(A[1:])
+    left_sum = A[0]
+    
+    # initialize diff, p = 1
+    diff = abs(left_sum-right_sum) 
+    
+    # try to find a smaller diff, 1 < p < n
+    for i in A[1:len(A)-1]: 
+        left_sum += i 
+        right_sum -= i 
+        d = abs(left_sum-right_sum) 
+        if d < diff: 
+            diff = d
+            
+    return diff
+```
+
 
 Second solution (better performance with a 100% score).
 
@@ -145,13 +189,13 @@ Find the min time for the frog to cross the river.
 
 ```python
 def solution(X, A):
-    r = set(range(1,X+1))
+    not_seen = set(range(1,X+1))
 
-    for i, v in enumerate(A):
-        if v in r:
-            r.remove(v)
-        if not bool(r):
-            return i
+    for index, pos in enumerate(A):
+        if pos in not_seen:
+            not_seen.remove(pos)
+        if not not_seen:
+            return index
 
     return -1
 ```
@@ -165,6 +209,14 @@ def solution(A):
     p = set(range(1,len(A)+1))
     A = set(A)
     return int(A == p)
+```
+
+Alternative: 
+
+```python
+def solution(A): 
+    not_seen = set(range(1,len(A)+1))    
+    return int(not not_seen.difference(set(A)))
 ```
 
 ### 2.9. MaxCounters
@@ -286,6 +338,25 @@ def count_total(p,i,x):
     return int(p[x+1] - p[i])
 ```
 
+Alternative: 
+
+```python
+def solution(A):
+    right_sum = sum(A)
+    
+    count = 0 
+    
+    for i in range(0,len(A)): 
+        if A[i] == 0: 
+            count += right_sum
+            if count > 10**9: 
+                return -1
+        else: 
+            right_sum -= 1
+    
+    return count
+```
+
 ### 2.12. CountDiv
 
 Find number of divisible number by K in the range [A,B]. Edge cases: A = B.
@@ -385,6 +456,38 @@ def solution(S, P, Q):
         else:
             res.append(4)
     return res
+```
+
+If we want to determine the sum of the slices: 
+
+```python
+def solution(chain, start, stop): 
+    w_chain = list(map(weight, chain))
+    s = partial_sum(w_chain)        
+    ss = tuple(zip(start, stop))
+    
+    slices = []
+    for start, stop in ss: 
+        if start == 0: 
+            slice_val = s[stop]
+        elif start == stop: 
+            slice_val = 0 
+        else: 
+            slice_val = s[stop]-s[start-1]
+        slices.append(slice_val)
+        
+    return slices
+    
+def weight(char):
+    w_dict = {'A':1,'C':2,'G':3,'T':4}
+    return w_dict[char]
+
+def partial_sum(a):
+    s = [a[0]]
+    for i in range(1,len(a)): 
+        s.append(s[i-1]+a[i])
+        # print(s)
+    return s
 ```
 
 
@@ -944,3 +1047,27 @@ def solution(A):
 
     return -1
 ```
+
+# Revision
+
+Based on [Intermediate Python Tutorial](https://www.youtube.com/watch?v=0VdzZQdaZ28&list=PLzMcBGfZo4-nhWva-6OVh1yKWHBs4o_tv). 
+
+## List Methods Reference
+
+[Documentation](https://docs.python.org/3/tutorial/datastructures.html): 
+
+1. list.append(x)
+2. list.extend(iterable)
+3. list.insert(i, x) 
+4. list.pop([i])
+5. list.remove(x)
+6. list.count(x)
+7. list.index(x[, start[, end]])
+8. list.sort(*, key=None, reverse=False)
+9. list.reverse()
+10. list.copy()
+11. list.clear()
+
+### Collections
+
+[Documentation](https://docs.python.org/3/library/collections.html?highlight=defaultdict#collections.defaultdict). 
